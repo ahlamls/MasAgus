@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/agusbgx"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl1"
+        android:layout_width="match_parent"
+        android:layout_height="48sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/bw_tv"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:text="690420 MB" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imageView6"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl1"
+        app:layout_constraintBottom_toTopOf="@id/adView"
+        android:layout_marginBottom="250dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"/>
+
+    <Button
+        android:id="@+id/tokoBtn"
+        app:layout_constraintBottom_toTopOf="@id/adView"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="#bb8f01"
+        android:textColor="#000000"
+        android:layout_height="wrap_content"
+        android:text="TOKO" />
+
+    <Button
+        android:id="@+id/helpBtn"
+        app:layout_constraintBottom_toTopOf="@id/adView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="wrap_content"
+
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="#bb8f01"
+        android:textColor="#000000"
+        android:layout_height="wrap_content"
+        android:text="TUTORIAL" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+
+        android:layout_width="150dp"
+        android:layout_height="290dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@id/adView"
+        app:layout_constraintRight_toRightOf="parent"
+
+        app:srcCompat="@drawable/masagus" />
+
+    <Button
+        android:id="@+id/showAdBtn"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/helpBtn"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="100dp"
+        android:layout_width="200dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:background="#ffffff"
+        android:layout_height="wrap_content"
+        android:text="Lihat Iklan (+50MB)" />
+
+    <com.google.android.gms.ads.AdView
+        ads:layout_constraintBottom_toBottomOf="parent"
+        ads:layout_constraintLeft_toLeftOf="parent"
+        ads:layout_constraintRight_toRightOf="parent"
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="ca-app-pub-1948241097718965/9442693522">
+    </com.google.android.gms.ads.AdView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
