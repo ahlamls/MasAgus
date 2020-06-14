@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/clx"
     android:background="@drawable/agusbgx"
     tools:context=".MainActivity">
 
@@ -89,6 +90,19 @@
         android:background="#ffffff"
         android:layout_height="wrap_content"
         android:text="Lihat Iklan (+50MB)" />
+
+    <Button
+        android:id="@+id/phoneBtn"
+        android:layout_width="wrap_content"
+        android:padding="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="#bb8f01"
+        android:drawableTop="@drawable/ic_phone_android_black_24dp"
+        app:layout_constraintBottom_toTopOf="@id/adView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_height="wrap_content"
+        android:text="HP" />
 
     <com.google.android.gms.ads.AdView
         ads:layout_constraintBottom_toBottomOf="parent"

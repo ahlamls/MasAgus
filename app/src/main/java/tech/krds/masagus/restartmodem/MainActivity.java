@@ -3,12 +3,14 @@ package tech.krds.masagus.restartmodem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,15 +39,17 @@ import static tech.krds.masagus.restartmodem.BikinAPKModMandul7Turunan.my_shared
 public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedpreferences;
     Long bw;
-    int modem;
-    Boolean tamat;
+    int modem,bg,chars;
+    Boolean tamat,ubur;
     Boolean modemnyala = false;
-    int increment;
+    int increment,multiplier;
     TextView bw_tv;
-    ImageView imageView6;
+    ImageView imageView6,imageView5;
     private AdView mAdView;
+    MediaPlayer mediaPlayer;
     private InterstitialAd mInterstitialAd;
     Button showAdBtn;
+    ConstraintLayout clx;
     private RewardedAd rewardedAd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAdClosed() {
                 // Load the next interstitial.
+                mediaPlayer.start();
                 mInterstitialAd.loadAd(new AdRequest.Builder().build());
             }
 
@@ -100,9 +105,12 @@ public class MainActivity extends AppCompatActivity {
         sharedpreferences = getSharedPreferences(my_shared_preferences, Context.MODE_PRIVATE);
         bw = sharedpreferences.getLong("bw", 0L);
         modem = sharedpreferences.getInt("modem", 1);
+        bg = sharedpreferences.getInt("bg", 1);
+        chars = sharedpreferences.getInt("char", 1);
         tamat = sharedpreferences.getBoolean("tamat", false);
+        ubur = sharedpreferences.getBoolean("ubur", false);
         if (tamat) {
-            showDialogx(1);
+           // showDialogx(1);
         }
 
         imageView6 = findViewById(R.id.imageView6);
@@ -125,9 +133,46 @@ public class MainActivity extends AppCompatActivity {
             increment = 1000;
             imageView6.setBackgroundResource(R.drawable.modem6off);
         }
+        clx = findViewById(R.id.clx);
+        if (bg == 1) {
+            multiplier = 1;
+            clx.setBackgroundResource(R.drawable.agusbgx);
+        } else if (bg == 2) {
+            multiplier = 2;
+            clx.setBackgroundResource(R.drawable.floorlv2);
+        } else if (bg == 3) {
+            multiplier = 3;
+            clx.setBackgroundResource(R.drawable.floorlv3);
+        } else if (bg == 4) {
+            multiplier=4;
+            clx.setBackgroundResource(R.drawable.floorlv4);
+        } else if (bg == 5) {
+            multiplier=5;
+            clx.setBackgroundResource(R.drawable.floorlv5);
+        }
+        imageView5  = findViewById(R.id.imageView5);
+        if (chars == 1) {
+            imageView5.setImageResource(R.drawable.masagus);
+        } else {
+            imageView5.setImageResource(R.drawable.maspras);
+        }
+
+        if (ubur) {
+            if (chars == 1) {
+                mediaPlayer = MediaPlayer.create(this,R.raw.masagusubur);
+            } else {
+                mediaPlayer = MediaPlayer.create(this,R.raw.masprasubur);
+            }
+        } else {
+            mediaPlayer = MediaPlayer.create(this,R.raw.uburuburnt);
+        }
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
 
 
-        showAdBtn.setText("Lihat Iklan (" + String.valueOf(increment * 50) + " MB)");
+
+
+        showAdBtn.setText("Lihat Iklan (" + String.valueOf(increment * 100) + " MB)");
         showAdBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,16 +186,16 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onRewardedAdClosed() {
-                            // Ad closed.
+                            mediaPlayer.start();
                         }
 
                         @Override
                         public void onUserEarnedReward(@NonNull RewardItem reward) {
                             SharedPreferences.Editor editor = sharedpreferences.edit();
-                            editor.putLong("bw", bw + (increment * 50));
+                            editor.putLong("bw", bw + (increment * 100));
                             editor.apply();
                             refreshBw();
-                            Toast.makeText(getApplicationContext(),"Sukses Mendapatkan Reward . Bandwidth " + String.valueOf(increment * 50) + " MB",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),"Sukses Mendapatkan Reward . Bandwidth " + String.valueOf(increment * 100) + " MB",Toast.LENGTH_LONG).show();
 
                         }
 
@@ -233,13 +278,13 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putLong("bw", bw + increment);
+                editor.putLong("bw",  bw + ( increment * multiplier) );
                 editor.apply();
                 refreshBw();
 
                 if (mInterstitialAd.isLoaded()) {
                     Random random = new Random();
-                    int randomNumber = random.nextInt(50 - 1) + 1;
+                    int randomNumber = random.nextInt(25 - 1) + 1;
                     if (randomNumber < 2) {
                         mInterstitialAd.show();
                     }
@@ -260,6 +305,26 @@ public class MainActivity extends AppCompatActivity {
         bw_tv.setText(String.valueOf(bw) + " MB");
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mediaPlayer != null) {
+            mediaPlayer.pause();
+            if (isFinishing()) {
+                mediaPlayer.stop();
+                mediaPlayer.release();
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mediaPlayer != null) {
+            mediaPlayer.start();
+        }
+    }
+
     private void showDialogx(final int type){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 this);
@@ -269,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
             title = "Tamat";
             message = "Kamu Sudah tamat game ini . Selamat kamu sudah berpindah ISP dari indigay dan tidak perlu lagi melakukan restart router . terimakasih sudah bermain Mas Agus Restart Router! . Tujuan dari game ini adalah untuk murtad dari ISP indihomo";
         } else {
-            message = "Matikan dan nyalakan modem dengan menyentuh gambar modem untuk mendapatkan bandwidth . bandwidth dapat kamu gunakan untuk membeli item di Toko . tombol toko berada di bawah gambar mas agus";
+            message = "Matikan dan nyalakan modem dengan menyentuh gambar modem untuk mendapatkan bandwidth . bandwidth dapat kamu gunakan untuk membeli item di Toko . tombol toko berada di bawah gambar mas agus . Gunakan Tombol HP Dibawah untuk mulai menggunakan Handphone . Handphone dapat diupgrade agar tidak kentang di Toko";
             title="Tutorial";
         }
 
